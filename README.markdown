@@ -1,7 +1,7 @@
 #Interceptor
 
 Interceptor is a proxy written in Node.js for intercepting songs played
-on turntable.fm.
+on [Turntable](http://turntable.fm).
 
 ##Requirements
 
@@ -14,19 +14,23 @@ on turntable.fm.
 
 Then, you need to configure your machine to use it as a proxy. If you
 know how to do this by yourself, interceptor binds to port 8080. Once
-bound, visit Turntable in a browser (which obeys proxies) and choose a
-room. Each time a new song comes up, the browser begins downloading the
-file. Interceptor recognizes the URL of a music file and begins
-redirecting the download stream not only to the browser, but also to a
-file. Interceptor currently supports music from Turntable's own service,
-`static.turntable.fm`, and MusicNet, `fp-limelight.musicnet.com`.
+Interceptor has bound and has been set as the proxy,, visit Turntable in
+a browser (which obeys proxies) and choose a room. Each time a new song
+comes up, the browser begins downloading the file. Interceptor recognizes
+the URL of a music file and begins redirecting the download stream not
+only to the browser, but also to a file. Interceptor currently supports
+music from Turntable's own service, `static.turntable.fm`, and MusicNet,
+`fp-limelight.musicnet.com`.
+
+With the -d (or --directory) option, you can set the directory to
+download into. Defaults to the current directory.
 
 Works as of 11.20.11.
 
 
 ###Mac
 
-System Preferences -> Network -> Advanced... -> Proxies -> Web Proxy
+    System Preferences -> Network -> Advanced... -> Proxies -> Web Proxy
 
 Enable Web Proxies, and add `localhost:8080` as the proxy.
 
