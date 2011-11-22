@@ -21,6 +21,9 @@ var static_pattern = /http\:\/\/static\.turntable\.fm\/upload\//;
 // Pattern for musicnet files.
 var musicnet_pattern = /http\:\/\/fp-limelight.musicnet.com/;
 
+// Pattern for soundcloud files.
+var soundcloud_pattern = /http\:\/\/ak-media.soundcloud.com\//;
+
 process.on('uncaughtException',function(error){
   console.log("Process: " + error);
 });
@@ -33,17 +36,22 @@ var mp3_filename = function(url) {
   if(musicnet_pattern.exec(url)) {
     return url.substring(71, 87);
   }
+
+  if(soundcloud_pattern.exec(url)) {
+    return url.substring(31, 51);
+  }
 }
 
 http.createServer(function(request, response) {
-  if(pattern.exec(request.url)) {
+  if(pattern.exec(request.url) || soundcloud_pattern.exec(request.url)) {
     util.log(request.method + " " + request.url);
   } else {
     util.log(request.method + " " + request.url.grey);
   }
   var mp3 = false;
 
-  if(static_pattern.exec(request.url) || musicnet_pattern.exec(request.url)) {
+  if(static_pattern.exec(request.url) || musicnet_pattern.exec(request.url)
+      || soundcloud_pattern.exec(request.url)) {
     var name = mp3_filename(request.url);
     if(!path.existsSync(name)) {
       console.log(("MP3 File Found, downloading to " + name).blue);

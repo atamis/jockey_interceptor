@@ -1,7 +1,7 @@
 #Interceptor
 
 Interceptor is a proxy written in Node.js for intercepting songs played
-on [Turntable](http://turntable.fm).
+on [Turntable](http://turntable.fm) and [Soundcloud](http://soundcloud.com).
 
 ##Requirements
 
@@ -14,18 +14,43 @@ on [Turntable](http://turntable.fm).
 
 Then, you need to configure your machine to use it as a proxy. If you
 know how to do this by yourself, interceptor binds to port 8080. Once
-Interceptor has bound and has been set as the proxy,, visit Turntable in
-a browser (which obeys proxies) and choose a room. Each time a new song
-comes up, the browser begins downloading the file. Interceptor recognizes
+Interceptor has bound and has been set as the proxy, visit Turntable or
+Soundcloud. On Turntable, you can simply join a room, and Interceptor
+will automatically download all the songs played. On Soundcloud, visit
+an artist's page and begin playing a song. Interceptor recognizes
 the URL of a music file and begins redirecting the download stream not
 only to the browser, but also to a file. Interceptor currently supports
-music from Turntable's own service, `static.turntable.fm`, and MusicNet,
-`fp-limelight.musicnet.com`.
+music from Turntable's own service, `static.turntable.fm`, Soundcloud,
+`ak-media.soundcloud.com`, and MusicNet, `fp-limelight.musicnet.com`.
+
+Both services store and send songs with alphanumeric seemingly
+pseudorandom names. Interceptor makes no attempt to change the name of
+the file. You can see how file names are chosen in the `mp3_filename()`
+function. Names typically follow a pattern that can be used to recognize
+the service they are retrieved from. Vanilla Turntable files
+(`static.turntable.fm`) can be recognized by their 96 character
+alphanumeric name. The URL Turntable uses doesn't include ".mp3", so
+Interceptor adds in when downloading. Soundcloud files are also
+alphanumeric, but they have only 13 characters. Most files played are
+then followed by ".128.mp3". This probably refers to their bitrate.
+Finally, MusicNet files (`fp-limelight.musicnet.com`) files are numeric
+only, featuring 8 numbers, followed by an underscore, then a number,
+typically 14.
+
+Luckily for us, Turntable songs (from both sources) include lots of
+metadata. Some of the metadata is inaccurate (indicating a lack of
+knowledge on the part of the uploader), but almost all include some kind
+of metadata. Unfortunately, we do not have such a luxury when dealing
+with Soundcloud. Their files have no metadata at all, and can be
+identified only by their presumably unique name. It would be
+hypothetically possible to read the metadata from the HTTP stream, but
+that is beyond the purview of Interceptor, and would be rather
+difficult.
 
 With the -d (or --directory) option, you can set the directory to
 download into. Defaults to the current directory.
 
-Works as of 11.20.11.
+Works as of 11.21.11.
 
 
 ###Mac
